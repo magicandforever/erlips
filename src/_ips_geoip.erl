@@ -23,7 +23,33 @@ handle(Req, 'GET') ->
     IpStr = Req:get(peer), 
     Query = Req:parse_qs(),
     QueryIp = ?GET3("ip", Query, IpStr),
-    {200, [], [QueryIp]}.
+    case egeoip:lookup(QueryIp) of
+        {ok, GeoIP} ->
+            ?DEBUG2("Query Ip is:~p~ngeoip:~p~n", [QueryIp, GeoIP]),
+            {200, [], geoip_json(GeoIP)};
+        {error, R} ->
+            {200, [], error_json(R)}
+    end.
+
+%% geoip response
+geoip_json(GeoIP) ->
+    [<<"{\"cuntroy\":\"">>, egeoip:get(GeoIP, country_name), <<"\",">>,
+         <<"\"city\":\"">>, egeoip:get(GeoIP, city), <<"\",">>,
+         <<"\"long\":">>, f2s(egeoip:get(GeoIP, longitude)), <<",">>,
+          <<"\"lat\":">>, f2s(egeoip:get(GeoIP, latitude)), <<",">>,
+         <<"\"post\":\"">>, egeoip:get(GeoIP, postal_code), <<"\"}">>].
+
+%% error response
+error_json(Error) ->
+    [<<"{\"error\":\"">>, io_lib:format("~p", [Error]), <<"\"}">>].
     
-    
+
+%% convert float to string
+f2s(N) when is_integer(N) ->
+    integer_to_list(N) ++ ".00";
+f2s(F) when is_float(F) ->
+    io_lib:format("~.2f", [F]).
+
+json_content_header() ->
+    {<<"Content-Type">>, <<"text/json">>}.
 
