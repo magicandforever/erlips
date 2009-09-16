@@ -10,10 +10,11 @@
 %% the log macro
 -ifdef(DEBUG).
 -define(DEBUG2(F, D), io:format(F, D)).
+-define(INFO2(F, D), io:format(F, D)).
 -else.
 -define(DEBUG2(F, D), ok).
+-define(INFO2(F, D), ok).
 -endif.
--define(INFO2(F, D), io:format(F, D)).
 -define(WARN2(F, D), io:format(F, D)).
 -define(ERROR2(F, D), io:format(F, D)).
 -define(FATAL2(F, D), io:format(F, D)).

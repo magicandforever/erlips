@@ -21,8 +21,9 @@ start_link() ->
     DocRoot = ?CONF_GET2(doc_root, "."),
     Ip = ?CONF_GET2(ip, "."),
     Port = ?CONF_GET2(port, 80),
+    Max = ?CONF_GET2(max, 5000),
     ?DEBUG2("start the ~p, ~p:~p doc root: ~p~n", [?MODULE, Ip, Port, DocRoot]),
-    start_link([{name, ?MODULE}, {ip, Ip}, {port, Port}], DocRoot).
+    start_link([{name, ?MODULE}, {ip, Ip}, {port, Port}, {max, Max}], DocRoot).
 
 %% @doc start the http server
 start_link(Opts, DocRoot) ->
