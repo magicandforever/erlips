@@ -36,7 +36,7 @@ handle_request(Req, DocRoot) ->
     Path = "/" ++ Path0 = Req:get(path),
 
     {Main, Minor} = Req:get(version),
-    ?INFO2("~s ~s HTTP ~B.~B ", [Method, Path, Main, Minor]),
+    ?INFO2("~s ~s HTTP ~B.~B ~n", [Method, Path, Main, Minor]),
 
     %% handle the request
     Resp = 
@@ -56,7 +56,7 @@ handle_request(Req, DocRoot) ->
             Req:serve_file(Path0, DocRoot)
     end,
 
-    ?INFO2("response ~s - ~s ~s ~B", [Req:get(peer)
+    ?INFO2("response ~s - ~s ~s ~B~n", [Req:get(peer)
                         , Req:get(method)
                         , Path
                         , Resp:get(code)]).
@@ -112,6 +112,7 @@ send_respond(Req, Code, Headers, Data) ->
     ] ++ server_header(),    
     Req:respond({Code, Headers ++ DefaultHeaders, Data}).
 
+        %{<<"Content-Type">>, negotiate_content_type(Req)},
 negotiate_content_type(Req) ->
     %% Determine the appropriate Content-Type header for a JSON response
     %% depending on the Accept header in the request. A request that explicitly

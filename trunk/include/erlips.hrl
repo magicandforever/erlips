@@ -8,11 +8,15 @@
 %%%----------------------------------------------------------------------
 
 %% the log macro
--define(WARN2(F, D), io:format(F, D)).
+-ifdef(DEBUG).
+-define(DEBUG2(F, D), io:format(F, D)).
+-else.
+-define(DEBUG2(F, D), ok).
+-endif.
 -define(INFO2(F, D), io:format(F, D)).
+-define(WARN2(F, D), io:format(F, D)).
 -define(ERROR2(F, D), io:format(F, D)).
 -define(FATAL2(F, D), io:format(F, D)).
--define(DEBUG2(F, D), io:format(F, D)).
 
 %% the config macro
 -define(CONF_GET2(K, Def), (
