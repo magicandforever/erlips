@@ -8,6 +8,11 @@
      {registered, []},
      {applications, [kernel, stdlib, sasl]},
      {mod, {erlipsapp, []}},
-     {env, []}
+     {env, [
+             {doc_root, "./www"},
+             {ip, "0.0.0.0"},
+             {port, 8080},
+             {http_handler_dirs, ["./ebin"]}
+         ]}
     ]
 }.

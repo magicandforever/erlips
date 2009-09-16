@@ -17,10 +17,11 @@
 
 %% @doc start the http server
 start_link() ->
+    load_mods_name(),
     DocRoot = ?CONF_GET2(doc_root, "."),
     Ip = ?CONF_GET2(ip, "."),
-    Port = ?CONF_GET2(port, "."),
-    ?DEBUG2("start the erlips_http, doc root:~p", [DocRoot]),
+    Port = ?CONF_GET2(port, 80),
+    ?DEBUG2("start the ~p, ~p:~p doc root: ~p~n", [?MODULE, Ip, Port, DocRoot]),
     start_link([{name, ?MODULE}, {ip, Ip}, {port, Port}], DocRoot).
 
 %% @doc start the http server
@@ -130,5 +131,21 @@ negotiate_content_type(Req) ->
 
 server_header() ->
     OTPVersion = "R" ++ integer_to_list(erlang:system_info(compat_rel)) ++ "B",
-    [{<<"Server">>, "wg /" ++ misc_util:get_app_vsn() ++
-                " (Erlang OTP/" ++ OTPVersion ++ ")"}].
+    [{<<"Server">>, ["erlips", "(Erlang OTP/", OTPVersion, ")"]}].
+
+
+%% doc load all http handler mods name in ebin
+load_mods_name() ->
+    Dirs = ?CONF_GET2(http_handler_dirs, ["./ebin"]),
+
+    Mods = 
+    [
+        [begin
+            ModStr = filename:basename(F, ".beam"),
+            list_to_atom(ModStr)
+        end
+        || F <- filelib:wildcard("_*.beam", Dir)]
+     || Dir <- Dirs],
+    
+    ?DEBUG2("http handler mods: ~p~n", [lists:append(Mods)]),
+    ok.
