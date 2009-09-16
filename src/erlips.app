@@ -12,6 +12,7 @@
              {doc_root, "./www"},
              {ip, "0.0.0.0"},
              {port, 8080},
+             {max, 5000},
              {http_handler_dirs, ["./ebin"]}
          ]}
     ]
