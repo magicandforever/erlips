@@ -77,70 +77,6 @@ process(["restart"]) ->
     init:restart(),
     ?STATUS_SUCCESS;
 
-process(["backup", Path]) ->
-    case mnesia:backup(Path) of
-        ok ->
-	    ?STATUS_SUCCESS;
-	{error, Reason} ->
-	    ?PRINT("Can't store backup in ~p at node ~p: ~p~n",
-		      [filename:absname(Path), node(), Reason]),
-	    ?STATUS_ERROR
-    end;
-
-process(["dump", Path]) ->
-    case dump_to_textfile(Path) of
-	ok ->
-	    ?STATUS_SUCCESS;
-	{error, Reason} ->
-            ?PRINT("Can't store dump in ~p at node ~p: ~p~n",
-                      [filename:absname(Path), node(), Reason]),
-	    ?STATUS_ERROR
-    end;
-
-process(["load", Path]) ->
-    case mnesia:load_textfile(Path) of
-        {atomic, ok} ->
-            ?STATUS_SUCCESS;
-        {error, Reason} ->
-            ?PRINT("Can't load dump in ~p at node ~p: ~p~n",
-                      [filename:absname(Path), node(), Reason]),
-	    ?STATUS_ERROR
-    end;
-
-process(["install-fallback", Path]) ->
-    case mnesia:install_fallback(Path) of
-	ok ->
-	    ?STATUS_SUCCESS;
-	{error, Reason} ->
-	    ?PRINT("Can't install fallback from ~p at node ~p: ~p~n",
-		      [filename:absname(Path), node(), Reason]),
-	    ?STATUS_ERROR
-    end;
-
-process(["import-file", Path]) ->
-    case jd2ejd:import_file(Path) of
-        ok ->
-            ?STATUS_SUCCESS;
-        {error, Reason} ->
-            ?PRINT("Can't import jabberd 1.4 spool file ~p at node ~p: ~p~n",
-                      [filename:absname(Path), node(), Reason]),
-	    ?STATUS_ERROR
-    end;
-
-process(["import-dir", Path]) ->
-    case jd2ejd:import_dir(Path) of
-        ok ->
-            ?STATUS_SUCCESS;
-        {error, Reason} ->
-            ?PRINT("Can't import jabberd 1.4 spool dir ~p at node ~p: ~p~n",
-                      [filename:absname(Path), node(), Reason]),
-	    ?STATUS_ERROR
-    end;
-
-process(["delete-expired-messages"]) ->
-    mod_offline:remove_expired_messages(),
-    ?STATUS_SUCCESS;
-
 process(["mnesia"]) ->
     ?PRINT("~p~n", [mnesia:system_info(all)]),
     ?STATUS_SUCCESS;
@@ -169,32 +105,13 @@ process(["delete-old-messages", Days]) ->
 	_Integer ->
 	    ?PRINT("Can't delete old messages. Please pass a positive integer as parameter.~n", []),
 	    ?STATUS_ERROR
-    end;
-
-process(Args) ->
-    case node_hooks:run_fold(node_ctl_process, false, [Args]) of
-	false ->
-	    print_usage(),
-	    ?STATUS_USAGE;
-	Status ->
-	    Status
     end.
-
 
 print_usage() ->
     CmdDescs =
 	[{"status", "get node status"},
 	 {"stop", "stop node"},
 	 {"restart", "restart node"},
-	 {"backup file", "store a database backup to file"},
-	 {"restore file", "restore a database backup from file"},
-	 {"install-fallback file", "install a database fallback from file"},
-	 {"dump file", "dump a database to a text file"},
-	 {"load file", "restore a database from a text file"},
-	 {"import-file file", "import user data from jabberd 1.4 spool file"},
-	 {"import-dir dir", "import user data from jabberd 1.4 spool directory"},
-	 {"delete-expired-messages", "delete expired offline messages from database"},
-	 {"delete-old-messages n", "delete offline messages older than n days from database"},
 	 {"mnesia [info]", "show information of Mnesia system"}
 	 ] ++
 	ets:tab2list(node_ctl_cmds),
@@ -286,12 +203,3 @@ dump_tab(F, T) ->
     lists:foreach(
       fun(Term) -> io:format(F,"~p.~n", [setelement(1, Term, T)]) end, All).
 
-%% Function copied from Erlang/OTP lib/sasl/src/sasl.erl which doesn't export it
-get_sasl_error_logger_type () ->
-    case application:get_env (sasl, errlog_type) of
-	{ok, error} -> error;
-	{ok, progress} -> progress;
-	{ok, all} -> all;
-	{ok, Bad} -> exit ({bad_config, {sasl, {errlog_type, Bad}}});
-	_ -> all
-    end.
