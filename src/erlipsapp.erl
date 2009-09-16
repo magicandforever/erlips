@@ -1,13 +1,13 @@
 %%%----------------------------------------------------------------------
 %%%
-%%% xiaonei.com copyright © 2009 
+%%% erlips @copyright 2009 
 %%%
-%%% @author yourmail@opi-corp.com
+%%% @author litaocheng@gmail.com 
 %%% @doc erlips app and supervisor callback
 %%%
 %%%----------------------------------------------------------------------
 -module(erlipsapp).
--author('yourmail@gmail.com').
+-author('litaocheng@gmail.com').
 -vsn('0.1').
 -include("erlips.hrl").
 
@@ -44,11 +44,11 @@ init(_Args) ->
     
     Stragegy = {one_for_one, 10, 10},
 
-    ModServer = {erlips_server, {erlips_server, start_link, []},
-                permanent, 2000, worker, [erlips_server]},
+    ModHttpd = {erlips_httpd, {erlips_httpd, start_link, []},
+                permanent, 2000, worker, [erlips_httpd]},
 
     {ok, {Stragegy, [
-                    ModServer 
+                    ModHttpd 
                     ]}
     }.
 
