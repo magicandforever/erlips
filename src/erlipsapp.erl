@@ -23,7 +23,7 @@
 -spec start(Args :: list()) -> 'ok' | {'error', any()}.
 start([UseCaclib]) ->
     ensure_apps(),
-    ?DEBUG2("start the deomapp~n", []),
+    ?DEBUG2("start the ~p~n", [?MODULE]),
     erlips_ctl:init(),
     init_caclib(UseCaclib),
     application:start(erlips).
@@ -40,14 +40,15 @@ stop(_State) ->
 
 %% @doc supervisor callback
 init(_Args) -> 
-    ?DEBUG2("init supervisor~n", []),
-    
     Stragegy = {one_for_one, 10, 10},
 
+    ModGeoip = {egeoip, {egeoip, start, []},
+                permanent, 2000, worker, [egeoip]},
     ModHttpd = {erlips_httpd, {erlips_httpd, start_link, []},
                 permanent, 2000, worker, [erlips_httpd]},
 
     {ok, {Stragegy, [
+                    ModGeoip,
                     ModHttpd 
                     ]}
     }.

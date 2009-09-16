@@ -3,8 +3,8 @@
 %%% erlips @copyright 2009 
 %%%
 %%% @author litaocheng@gmail.com 
-%%% @doc the modul handle the request path:
-%%%  "http://host/tldh/st
+%%% @doc the module handle the request path:
+%%%  "http://host/ips/geoip
 %%%
 %%%----------------------------------------------------------------------
 -module('_ips_geoip').
@@ -22,6 +22,8 @@
 handle(Req, 'GET') ->
     IpStr = Req:get(peer), 
     Query = Req:parse_qs(),
-    QureyIp = GET2("ip", Query, IpStr),
+    QueryIp = ?GET3("ip", Query, IpStr),
+    {200, [], [QueryIp]}.
+    
     
 
