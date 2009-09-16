@@ -16,17 +16,12 @@ Erlang实战
 Second-Level Title (optional)
 -----------------------------
  
-开发任务
- 
 IP在线查询服务
- 
  
  
 GET geoip?ip=63.8.36.135
  
 200 HTTP/1.1
- 
- 
  
 {
  
