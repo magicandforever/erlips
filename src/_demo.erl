@@ -10,9 +10,13 @@
 -author('ltiaocheng@gmail.com').
 -vsn('0.1').
 -include("erlips.hrl").
+-include("erlips_type.hrl").
 
 -export([handle/2]).
 
+%% @doc handle the http request
+-spec handle(Req :: tuple(), Method :: atom()) -> 
+    {http_code(), header_list(), iodata()}.
 handle(Req, Method) ->
     ?DEBUG2("handle request :~p ~n", [Req]),
     IpStr = Req:get(peer), 

@@ -6,9 +6,10 @@
 -module(egeoip).
 -author('bob@redivi.com').
 
+-include("erlips.hrl").
 -behaviour(gen_server).
 
--compile(export_all).
+%-compile(export_all).
 
 %% record access API
 -export([get/2]).
@@ -646,11 +647,12 @@ ensure_binary_list(Other) ->
 bench() ->
     bench(10000).
 
-test() ->
+test1() ->
     {ok, IpAddressLong} = ip2long({207,145,216,106}),
     {ok, IpAddressLong} = ip2long("207.145.216.106"),
     egeoip:start(),
     {ok, R} = egeoip:lookup(IpAddressLong),
+    io:format("r:~p~n", [R]),
     #geoip{country_code = "US",
 	   country_code3 = "USA",
 	   country_name = "United States",
@@ -664,3 +666,21 @@ test() ->
 	   region = <<"NY">>,
            _ = _} = R1,
     ok.
+
+-ifdef(EUNIT).
+ip2long_test_() ->
+    [
+        ?_assertEqual({ok, 3482441834}, ip2long({207,145,216,106}))
+    ].
+
+lookup_test_() ->
+    {ok, IpAddressLong} = ip2long({207,145,216,106}),
+    {setup,
+        fun() -> egeoip:start() end,
+        fun(_) -> egeoip:stop() end,
+        [
+            ?_assertEqual(<<"CA">>, (element(2, egeoip:lookup(IpAddressLong)))#geoip.region)
+        ]
+    }.
+
+-endif.
