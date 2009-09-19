@@ -34,10 +34,11 @@ handle(Req, 'GET') ->
 %% geoip response
 geoip_json(GeoIP) ->
     [<<"{\"cuntroy\":\"">>, egeoip:get(GeoIP, country_name), <<"\",">>,
+         <<"\"region\":\"">>, egeoip:get(GeoIP, region), <<"\",">>,
          <<"\"city\":\"">>, egeoip:get(GeoIP, city), <<"\",">>,
          <<"\"long\":">>, f2s(egeoip:get(GeoIP, longitude)), <<",">>,
-          <<"\"lat\":">>, f2s(egeoip:get(GeoIP, latitude)), <<",">>,
-         <<"\"post\":\"">>, egeoip:get(GeoIP, postal_code), <<"\"}">>].
+         <<"\"lat\":">>, f2s(egeoip:get(GeoIP, latitude)), <<"\"}">>
+     ].
 
 %% error response
 error_json(Error) ->
