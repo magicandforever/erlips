@@ -53,3 +53,14 @@ f2s(F) when is_float(F) ->
 json_content_header() ->
     {<<"Content-Type">>, <<"text/json">>}.
 
+-ifdef(EUNIT).
+f2s_test_() ->
+    [
+        ?_assertEqual("2.00", f2s(2)),
+        ?_assertEqual(["2.01"], f2s(2.01)),
+        ?_assertEqual(["0.00"], f2s(0.00)),
+        ?_assertEqual(["2.01"], f2s(2.0102)),
+        ?_assertError(function_clause, f2s('2.00'))
+    ].
+
+-endif.

@@ -1,8 +1,8 @@
 %%%----------------------------------------------------------------------
 %%%
-%%% xiaonei.com copyright © 2009 
+%%% litaocheng @copyright © 2009 
 %%%
-%%% @author yourmail@opi-corp.com
+%%% @author litaocheng@gmail.com
 %%% @doc erlips header file
 %%%
 %%%----------------------------------------------------------------------
@@ -25,4 +25,8 @@
         catch _:_ ->
             Def
         end)).
+
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
                 
