@@ -647,26 +647,6 @@ ensure_binary_list(Other) ->
 bench() ->
     bench(10000).
 
-test1() ->
-    {ok, IpAddressLong} = ip2long({207,145,216,106}),
-    {ok, IpAddressLong} = ip2long("207.145.216.106"),
-    egeoip:start(),
-    {ok, R} = egeoip:lookup(IpAddressLong),
-    io:format("r:~p~n", [R]),
-    #geoip{country_code = "US",
-	   country_code3 = "USA",
-	   country_name = "United States",
-	   region = <<"CA">>,
-           _ = _} = R,
-    %% This is the test IP that MaxMind uses
-    {ok, R1} = egeoip:lookup("24.24.24.24"),
-    #geoip{country_code = "US",
-	   country_code3 = "USA",
-	   country_name = "United States",
-	   region = <<"NY">>,
-           _ = _} = R1,
-    ok.
-
 -ifdef(EUNIT).
 ip2long_test_() ->
     [

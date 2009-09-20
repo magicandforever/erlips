@@ -10,7 +10,6 @@
 -export([start/0,
 	 init/0,
 	 process/1,
-	 dump_to_textfile/1,
 	 register_commands/3,
 	 register_commands/4,
 	 unregister_commands/3,
@@ -90,22 +89,7 @@ process(["mnesia", Arg]) when is_list(Arg) ->
 	{'EXIT', Error} -> ?PRINT("Error: ~p~n", [Error]);
 	Return -> ?PRINT("~p~n", [Return])
     end,
-    ?STATUS_SUCCESS;
-
-process(["delete-old-messages", Days]) ->
-    case catch list_to_integer(Days) of
-	{'EXIT',{Reason, _Stack}} ->
-            ?PRINT("Can't delete old messages (~p). Please pass an integer as parameter.~n",
-                      [Reason]),
-	    ?STATUS_ERROR;
-	Integer when Integer >= 0 ->
-	    {atomic, _} = mod_offline:remove_old_messages(Integer),
-	    ?PRINT("Removed messages older than ~s days~n", [Days]),
-	    ?STATUS_SUCCESS;
-	_Integer ->
-	    ?PRINT("Can't delete old messages. Please pass a positive integer as parameter.~n", []),
-	    ?STATUS_ERROR
-    end.
+    ?STATUS_SUCCESS.
 
 print_usage() ->
     CmdDescs =
@@ -168,33 +152,6 @@ unregister_commands(Host, CmdDescs, Module, Function) ->
     node_hooks:delete(node_ctl_process,
 			  Module, Function, 50),
     ok.
-
-dump_to_textfile(File) ->
-    dump_to_textfile(mnesia:system_info(is_running), file:open(File, write)).
-dump_to_textfile(yes, {ok, F}) ->
-    Tabs1 = lists:delete(schema, mnesia:system_info(local_tables)),
-    Tabs = lists:filter(
-	     fun(T) ->
-		     case mnesia:table_info(T, storage_type) of
-			 disc_copies -> true;
-			 disc_only_copies -> true;
-			 _ -> false
-		     end
-	     end, Tabs1),
-    Defs = lists:map(
-	     fun(T) -> {T, [{record_name, mnesia:table_info(T, record_name)},
-			    {attributes, mnesia:table_info(T, attributes)}]} 
-	     end,
-	     Tabs),
-    io:format(F, "~p.~n", [{tables, Defs}]),
-    lists:foreach(fun(T) -> dump_tab(F, T) end, Tabs),
-    file:close(F);
-dump_to_textfile(_, {ok, F}) ->
-    file:close(F),
-    {error, mnesia_not_running};
-dump_to_textfile(_, {error, Reason}) ->
-    {error, Reason}.
-
 
 dump_tab(F, T) ->
     W = mnesia:table_info(T, wild_pattern),

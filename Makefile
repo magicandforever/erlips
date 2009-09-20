@@ -1,3 +1,4 @@
+.PHONY: all test edoc clean
 all:
 	(cd src;$(MAKE))
 
