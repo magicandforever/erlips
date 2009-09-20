@@ -1,7 +1,7 @@
 include ../include.mk
 
 APPLICATION=tldh
-DOC_OPTS={dir,\"../../edoc/tldh\"}
+DOC_OPTS={dir,\"../edoc\"}
 
 all: $(EBIN_FILES)
 
