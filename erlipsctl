@@ -53,7 +53,7 @@ cac_name()
     echo `cat $CACNAMEFILE | grep -s '^\{.*\}\.$' | cut -d \' -f 2`
 }
 
-RUNAPP="$RUNAPP start false"
+RUNAPP="$RUNAPP"
 
 NAME=-name
 [ "$ERLANG_NODE" = "${ERLANG_NODE%.*}" ] && NAME=-sname

@@ -14,18 +14,17 @@
 -behaviour(application).
 -behaviour(supervisor).
 
--export([start/1]).
+-export([start/0]).
 -export([start/2, stop/1]).
 -export([init/1]).
 
 
 %% @doc start the application from the erl shell
--spec start(Args :: list()) -> 'ok' | {'error', any()}.
-start([UseCaclib]) ->
+-spec start() -> 'ok' | {'error', any()}.
+start() ->
     ensure_apps(),
     ?DEBUG2("start the ~p~n", [?MODULE]),
     erlips_ctl:init(),
-    init_caclib(UseCaclib),
     application:start(erlips).
 
 %% @doc the application start callback
@@ -61,9 +60,3 @@ init(_Args) ->
 ensure_apps() ->
     application:start(sasl),
     ok.
-
-%% init the caclib
-init_caclib(false) -> ok;
-init_caclib(true)->
-   ?DEBUG2("start the caclibapp!~n", []),
-    caclibapp:start().
