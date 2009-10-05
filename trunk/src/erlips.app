@@ -3,7 +3,12 @@
      {vsn, "0.1"},
      {modules, [
                 erlipsapp,
-                erlips_server
+                egoip,
+                erlips_httpd,
+                erlips_ctl,
+                _demo,
+                _echo,
+                _ips_geoip
                 ]},
      {registered, []},
      {applications, [kernel, stdlib, sasl]},

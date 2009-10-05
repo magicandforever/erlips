@@ -28,7 +28,8 @@ start() ->
     application:start(erlips).
 
 %% @doc the application start callback
--spec start(Type :: any(), Args :: any()) -> any().
+-spec start(Type :: atom(), Args :: any()) ->
+    {'ok', pid()} | {'ok', pid(), any()}.
 start(_Type, _Args) ->
     ?DEBUG2("start the supervisor sup ~n", []),
     supervisor:start_link({local, erlips_sup}, ?MODULE, []).

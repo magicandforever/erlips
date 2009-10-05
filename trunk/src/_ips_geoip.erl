@@ -51,9 +51,6 @@ f2s(N) when is_integer(N) ->
 f2s(F) when is_float(F) ->
     io_lib:format("~.2f", [F]).
 
-json_content_header() ->
-    {<<"Content-Type">>, <<"text/json">>}.
-
 -ifdef(EUNIT).
 f2s_test_() ->
     [

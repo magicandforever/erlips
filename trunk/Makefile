@@ -1,4 +1,4 @@
-.PHONY: all test edoc clean
+.PHONY: all test edoc dialyzer clean
 all:
 	(cd src;$(MAKE))
 
@@ -9,6 +9,10 @@ test:
 edoc: 
 	(mkdir -p ./edoc)
 	(cd src; $(MAKE) edoc)
+
+dialyzer: clean
+	(cd srr;$(MAKE) DEBUG=true)
+	(dialyzer -Wunderspecs -r .)
 
 clean:
 	(cd src;$(MAKE) clean)

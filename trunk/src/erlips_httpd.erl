@@ -16,6 +16,8 @@
 -define(MAX_MOD_LEN, 255).
 
 %% @doc start the http server
+-spec start_link() ->
+    {'ok', pid()} | {'error', any()}.
 start_link() ->
     load_mods_name(),
     DocRoot = ?CONF_GET2(doc_root, "."),
@@ -26,6 +28,8 @@ start_link() ->
     start_link([{name, ?MODULE}, {ip, Ip}, {port, Port}, {max, Max}], DocRoot).
 
 %% @doc start the http server
+-spec start_link([tuple()], string()) ->
+    {'ok', pid()} | {'error', any()}.
 start_link(Opts, DocRoot) ->
     Loop = fun(Req) -> ?MODULE:handle_request(Req, DocRoot) end,
     mochiweb_http:start([{loop, Loop} | Opts]).
@@ -100,8 +104,8 @@ get_handle_mod(Path, Acc, AccLen) ->
     get_handle_mod(Rest, Acc2, AccLen2).
 
 
-error_to_rsp(Error) ->
-    ?DEBUG2("error is~p", [Error]),
+error_to_rsp(_Error) ->
+    ?DEBUG2("error is~p", [_Error]),
     {500, "", <<"500 Internal Error">>}.
 
 %%  send data to client
@@ -149,5 +153,5 @@ load_mods_name() ->
         || F <- filelib:wildcard("_*.beam", Dir)]
      || Dir <- Dirs],
     
-    ?DEBUG2("http handler mods: ~p~n", [lists:append(Mods)]),
+    ?INFO2("http handler mods: ~p~n", [lists:append(Mods)]),
     ok.

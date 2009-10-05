@@ -13,5 +13,5 @@
 
 -export([handle/2]).
 
-handle(Req, Method) ->
+handle(_Req, _Method) ->
     {200, [], <<"ok">>}.
