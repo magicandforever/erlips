@@ -29,8 +29,6 @@ ERL_OBJECTS := $(ERL_SOURCES:%.erl=$(EBIN_DIR)/%.$(EMULATOR))
 ERL_DOCUMENTS = $(ERL_SOURCES:%.erl=$(DOC_DIR)/%.html)
 ERL_OBJECTS_LOCAL := $(ERL_SOURCES:%.erl=./%.$(EMULATOR))
 APP_FILES := $(wildcard *.app)
-#EBIN_FILES = $(ERL_OBJECTS) $(ERL_DOCUMENTS) $(APP_FILES:%.app=$(EBIN_DIR)/%.app)
-#EBIN_FILES_NO_DOCS = $(ERL_OBJECTS) $(APP_FILES:%.app=../ebin/%.app)
 EBIN_FILES = $(ERL_OBJECTS) $(APP_FILES:%.app=$(EBIN_DIR)/%.app)
 MODULES = $(ERL_SOURCES:%.erl=%)
 

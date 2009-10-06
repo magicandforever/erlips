@@ -1,8 +1,11 @@
 %%%----------------------------------------------------------------------
 %%%
+%%% @copyright 2009 erlips
 %%%
 %%% @author litaocheng@gmail.com
 %%% @doc the erlips ctl module
+%%% @end
+%%%
 %%%----------------------------------------------------------------------
 -module(erlips_ctl).
 -author('litaocheng@gmail.com').
