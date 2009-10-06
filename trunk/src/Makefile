@@ -1,6 +1,6 @@
 include ../include.mk
 
-APPLICATION=tldh
+APPLICATION=erlips
 DOC_OPTS={dir,\"../edoc\"}
 
 all: $(EBIN_FILES)
@@ -12,9 +12,7 @@ clean:
 	rm -rf $(EBIN_FILES)
 
 edoc:
-	$(ERL) -noshell -pa ../ebin \
-		-eval "edoc:application($(APPLICATION), \".\", [$(DOC_OPTS)])" \
-		-s init stop
+	$(ERL) -noshell -eval "edoc:application(${APPLICATION}, \".\", [${DOC_OPTS}]),init:stop()"
 
 test: all
 	$(ERL) -noshell -pa ../ebin -s eunit test '.' -s init stop

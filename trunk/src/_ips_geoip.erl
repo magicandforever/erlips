@@ -1,10 +1,11 @@
 %%%----------------------------------------------------------------------
 %%%
-%%% erlips @copyright 2009 
+%%% @copyright 2009 erlips 
 %%%
 %%% @author litaocheng@gmail.com 
 %%% @doc the module handle the request path:
-%%%  "http://host/ips/geoip
+%%%  "http://host/ips/geoip"
+%%% @end
 %%%
 %%%----------------------------------------------------------------------
 -module('_ips_geoip').
@@ -18,6 +19,8 @@
 -export([handle/2]).
 
 %% @doc handle the /ips/geoip request
+%% @spec handle(Req :: any(), Method :: atom()) -> 
+%%    {pos_integer(), list(), iodata()}
 -spec handle(Req :: any(), Method :: atom()) -> 
     {pos_integer(), list(), iodata()}.
 handle(Req, 'GET') ->

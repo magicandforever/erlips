@@ -1,9 +1,10 @@
 %%%----------------------------------------------------------------------
 %%%
-%%% erlips @copyright 2009 
+%%% @copyright 2009 erlips 
 %%%
 %%% @author litaocheng@gmail.com 
 %%% @doc erlips app and supervisor callback
+%%% @end
 %%%
 %%%----------------------------------------------------------------------
 -module(erlipsapp).

@@ -1,10 +1,12 @@
 %%%----------------------------------------------------------------------
 %%%
-%%% wg, Copyright (C) 2009 
+%%% @copyright 2009 erlips
 %%%
 %%% @author litaocheng@gmail.com
 %%% @doc the demo module handle the request path:
-%%%  "http://host/demo
+%%%  "http://host/demo"
+%%% @end
+%%%
 %%%----------------------------------------------------------------------
 -module('_demo').
 -author('ltiaocheng@gmail.com').
