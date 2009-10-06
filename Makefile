@@ -12,7 +12,7 @@ edoc:
 
 dialyzer: clean
 	(cd srr;$(MAKE) DEBUG=true)
-	(dialyzer -Wunderspecs -r .)
+	(dialyzer -Werror_handling -Wrace_conditions -Wunderspecs -r .)
 
 clean:
 	(cd src;$(MAKE) clean)

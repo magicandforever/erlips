@@ -14,6 +14,7 @@
 
 -include("erlips_ctl.hrl").
 
+-spec start() -> no_return(). 
 start() ->
     case init:get_plain_arguments() of
 	[SNode | Args]->
@@ -47,11 +48,14 @@ start() ->
 	    halt(?STATUS_USAGE)
     end.
 
+-spec init() -> 'ok'.
 init() ->
     ets:new(erlips_ctl_cmds, [named_table, set, public]),
-    ets:new(erlips_ctl_host_cmds, [named_table, set, public]).
+    ets:new(erlips_ctl_host_cmds, [named_table, set, public]),
+    ok.
 
 
+-spec process([string()]) -> integer().
 process(["status"]) ->
     {InternalStatus, ProvidedStatus} = init:get_status(),
     ?PRINT("Node ~p is ~p. Status: ~p~n",

@@ -18,7 +18,8 @@
 -export([handle/2]).
 
 %% @doc handle the /ips/geoip request
--spec handle(Req :: any(), Method :: atom()) -> {pos_integer(), list(), iodata()}.
+-spec handle(Req :: any(), Method :: atom()) -> 
+    {pos_integer(), list(), iodata()}.
 handle(Req, 'GET') ->
     IpStr = Req:get(peer), 
     Query = Req:parse_qs(),
