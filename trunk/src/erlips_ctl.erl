@@ -78,29 +78,14 @@ process(["stop"]) ->
 
 process(["restart"]) ->
     init:restart(),
-    ?STATUS_SUCCESS;
-
-process(["mnesia"]) ->
-    ?PRINT("~p~n", [mnesia:system_info(all)]),
-    ?STATUS_SUCCESS;
-
-process(["mnesia", "info"]) ->
-    mnesia:info(),
-    ?STATUS_SUCCESS;
-
-process(["mnesia", Arg]) when is_list(Arg) ->
-    case catch mnesia:system_info(list_to_atom(Arg)) of
-	{'EXIT', Error} -> ?PRINT("Error: ~p~n", [Error]);
-	Return -> ?PRINT("~p~n", [Return])
-    end,
     ?STATUS_SUCCESS.
+
 
 print_usage() ->
     CmdDescs =
 	[{"status", "get node status"},
 	 {"stop", "stop node"},
-	 {"restart", "restart node"},
-	 {"mnesia [info]", "show information of Mnesia system"}
+	 {"restart", "restart node"}
 	 ] ++
 	ets:tab2list(erlips_ctl_cmds),
     MaxCmdLen =
