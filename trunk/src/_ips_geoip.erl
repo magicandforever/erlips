@@ -37,7 +37,7 @@ handle(Req, 'GET') ->
 
 %% geoip response
 geoip_json(GeoIP) ->
-    [<<"{\"cuntroy\":\"">>, egeoip:get(GeoIP, country_name), <<"\",">>,
+    [<<"{\"country\":\"">>, egeoip:get(GeoIP, country_name), <<"\",">>,
          <<"\"region\":\"">>, egeoip:get(GeoIP, region), <<"\",">>,
          <<"\"city\":\"">>, egeoip:get(GeoIP, city), <<"\",">>,
          <<"\"long\":">>, f2s(egeoip:get(GeoIP, longitude)), <<",">>,
