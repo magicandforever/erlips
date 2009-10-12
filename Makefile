@@ -18,7 +18,6 @@ plt :
 
 dialyzer: clean
 	(cd src;$(MAKE) DEBUG=true)
-	#(dialyzer --plt $(PLT) -Werror_handling -Wrace_conditions -Wunderspecs -r .)
 	(dialyzer --plt $(PLT) -Werror_handling -Wrace_conditions  -r .)
 
 clean:
