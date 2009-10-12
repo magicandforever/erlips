@@ -41,7 +41,7 @@ geoip_json(GeoIP) ->
          <<"\"region\":\"">>, egeoip:get(GeoIP, region), <<"\",">>,
          <<"\"city\":\"">>, egeoip:get(GeoIP, city), <<"\",">>,
          <<"\"long\":">>, f2s(egeoip:get(GeoIP, longitude)), <<",">>,
-         <<"\"lat\":">>, f2s(egeoip:get(GeoIP, latitude)), <<"\"}">>
+         <<"\"lat\":">>, f2s(egeoip:get(GeoIP, latitude)), <<"}">>
      ].
 
 %% error response
