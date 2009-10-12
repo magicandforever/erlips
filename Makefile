@@ -9,6 +9,10 @@ test: clean
 	(cd src;$(MAKE) TEST=true)
 	(erl -pa ./ebin -eval "eunit:test(\"./ebin\", [verbose]), init:stop()")
 
+comm_test:
+	(mkdir -p ./test/log)
+	(run_test -logdir ./test/log -dir ./test/)
+
 edoc: 
 	(mkdir -p ./edoc)
 	(cd src; $(MAKE) edoc)
