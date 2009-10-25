@@ -74,9 +74,9 @@ test_egeoip(Config) ->
         {ok, {200, Body}} ->
             case mochijson2:decode(Body) of
                 {struct, Props} ->
-                    proplists:get_value("country", Props) =:= "china" andalso
-                    proplists:get_value("region", Props) =:= "22" andalso
-                    proplists:get_value("city", Props) =:= "Beijing"
+                    proplists:get_value(<<"country">>, Props) =:= <<"China">> andalso
+                    proplists:get_value(<<"region">>, Props) =:= <<"22">> andalso
+                    proplists:get_value(<<"city">>, Props) =:= <<"Beijing">>
             end;
         Other ->
             io:format("http request ret:~p~n", [Other]),

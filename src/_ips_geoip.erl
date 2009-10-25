@@ -24,6 +24,7 @@
 -spec handle(Req :: any(), Method :: atom()) -> 
     {pos_integer(), list(), iodata()}.
 handle(Req, 'GET') ->
+    Ip = proplists:get_value("ip", []), 
     IpStr = Req:get(peer), 
     Query = Req:parse_qs(),
     QueryIp = ?GET3("ip", Query, IpStr),
