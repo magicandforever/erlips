@@ -4,10 +4,11 @@
 
 -define(DEF_CONFIG, "erlips.config").
 -define(SCRIPT_EXT, ".script").
+-define(REL_DIR, "target_release").
 
 main(Args) ->
     io:format("arg is ~p~n", [Args]),
-    {ok, File} = get_config_file(Args),
+    File = get_config_file(Args),
     {ok, Config} = get_rel_config(File),
     {ok, Server} = reltool:start_server(Config),
     {ok, RelConfig} = reltool:get_config(Server, true, true),
@@ -41,4 +42,6 @@ gen_boot_script(Server, RelName) ->
 
 %% gen the target system
 gen_target_system(Server) ->
-    ok.
+    {ok, Spec} = reltool:get_target_spec(Server),
+    file:make_dir(?REL_DIR),
+    ok = reltool:eval_target_spec(Spec, code:root_dir(), ?REL_DIR). 
