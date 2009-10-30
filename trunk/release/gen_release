@@ -53,6 +53,5 @@ gen_target_system(Server, ConfigFile) ->
 
 get_reldir() ->
     {{Y, Mon, Day}, {H, M, S}} = erlang:localtime(),
-    lists:concat([?REL_DIR_BASE,
-                    "-", Y, "-", Mon, "-", Day,
-                    "-", H, ":", M, ":", S]).
+    lists:flatten(io_lib:format("~s-~b~2..0b~2..0b-~2..0b~2..0b~2..0b", 
+            [?REL_DIR_BASE, Y, Mon, Day, H, M, S])).
