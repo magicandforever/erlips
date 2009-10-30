@@ -4,7 +4,7 @@
 
 -define(DEF_CONFIG, "erlips.config").
 -define(SCRIPT_EXT, ".script").
--define(REL_DIR, "target_release").
+-define(REL_DIR_BASE, "target-release").
 
 main(Args) ->
     io:format("arg is ~p~n", [Args]),
@@ -36,12 +36,20 @@ gen_boot_script(Server, RelName) ->
     {ok, ScriptData} = reltool:get_script(Server, RelName),
     ScriptStr = io_lib:format("~p.", [ScriptData]),
     Script = RelName ++ ?SCRIPT_EXT,
-    io:format("the script file is ~p~n", [Script]),
+    %io:format("the script file is ~p~n", [Script]),
     ok = file:write_file(Script, ScriptStr),
     ok = systools:script2boot(RelName).
 
 %% gen the target system
 gen_target_system(Server) ->
     {ok, Spec} = reltool:get_target_spec(Server),
-    file:make_dir(?REL_DIR),
-    ok = reltool:eval_target_spec(Spec, code:root_dir(), ?REL_DIR). 
+    RelDir = get_reldir(),
+    file:make_dir(RelDir),
+    ok = reltool:eval_target_spec(Spec, code:root_dir(), RelDir),
+    io:format("~p~n", [file:list_dir(RelDir)]). 
+
+get_reldir() ->
+    {{Y, Mon, Day}, {H, M, S}} = erlang:localtime(),
+    lists:concat([?REL_DIR_BASE,
+                    "-", Y, "-", Mon, "-", Day,
+                    "-", H, ":", M, ":", S]).
