@@ -1,5 +1,5 @@
 {application, erlips,
-    [{description, "some description"},
+    [{description, "Erlang Ip Services App"},
      {vsn, "0.1"},
      {modules, [
                 erlipsapp,
