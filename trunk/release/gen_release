@@ -2,7 +2,7 @@
 %% -*- erlang -*-
 %%%! -smp disable
 
--define(DEF_CONFIG, "erlips.config").
+-define(DEF_CONFIG, "rel.config").
 -define(SCRIPT_EXT, ".script").
 -define(REL_DIR_BASE, "target-release").
 
