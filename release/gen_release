@@ -7,12 +7,12 @@
 -define(REL_DIR_BASE, "target-release").
 
 main(Args) ->
-    %io:format("arg is ~p~n", [Args]),
+    io:format("arg is ~p~n", [Args]),
     File = get_config_file(Args),
-    {ok, Config} = get_rel_config(File),
-    {ok, Server} = reltool:start_server(Config),
-    {ok, RelConfig} = reltool:get_config(Server, true, true),
-    %io:format("full config is :~p~n", [RelConfig]),
+    File = get_config_file(Args),
+    {ok, Server} = reltool:start_server([{config, File}]),
+    {ok, _RelConfig} = reltool:get_config(Server, true, true),
+    %io:format("full config is :~p~n", [_RelConfig]),
     
     gen_boot_script(Server, rel_name(File)),
     gen_target_system(Server, File).
@@ -20,16 +20,12 @@ main(Args) ->
 %% get config file
 get_config_file([]) ->
     ?DEF_CONFIG;
-get_config_file(Config) ->
+get_config_file([Config]) ->
     Config.
 
 %% get the release name from the file
 rel_name(File) ->
     filename:basename(File, ".config").
-
-%% get the reltool config for project
-get_rel_config(File) ->
-    file:consult(File).
 
 %% gen the boot script and boot binary file
 gen_boot_script(Server, RelName) ->
