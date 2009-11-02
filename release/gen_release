@@ -4,6 +4,7 @@
 
 -define(DEF_CONFIG, "rel.config").
 -define(SCRIPT_EXT, ".script").
+-define(ZIP_EXT, ".zip").
 -define(REL_DIR_BASE, "target-release").
 
 main(Args) ->
@@ -15,7 +16,11 @@ main(Args) ->
     io:format("full config is :~p~n", [_RelConfig]),
     
     gen_boot_script(Server, rel_name(File)),
-    gen_target_system(Server, File).
+    {ok, RelDir} = gen_target_system(Server, File),
+    io:format("create zip..."),
+    ZipFile = RelDir ++ ?ZIP_EXT,
+    {ok, ZipFile} = zip:zip(ZipFile, [RelDir]),
+    io:format("ok~nzip is ~p~n", [ZipFile]).
 
 %% get config file
 get_config_file([]) ->
@@ -45,7 +50,8 @@ gen_target_system(Server, ConfigFile) ->
     {ok, _} = file:copy(ConfigFile, filename:join([RelDir, ConfigFile])),
     LibDir = filename:join([RelDir, "lib"]),
     io:format("reldir:~p~nsub dirs:~p~nlib dirs:~p~n", 
-        [RelDir, file:list_dir(RelDir), file:list_dir(LibDir)]). 
+        [RelDir, file:list_dir(RelDir), file:list_dir(LibDir)]),
+    {ok, RelDir}. 
 
 get_reldir() ->
     {{Y, Mon, Day}, {H, M, S}} = erlang:localtime(),
