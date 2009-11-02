@@ -12,7 +12,7 @@ main(Args) ->
     File = get_config_file(Args),
     {ok, Server} = reltool:start_server([{config, File}]),
     {ok, _RelConfig} = reltool:get_config(Server, true, true),
-    %io:format("full config is :~p~n", [_RelConfig]),
+    io:format("full config is :~p~n", [_RelConfig]),
     
     gen_boot_script(Server, rel_name(File)),
     gen_target_system(Server, File).
