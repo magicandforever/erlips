@@ -11,7 +11,7 @@
 
 erl_exists()
 {
-    echo -n "check if ERLANG/OTP exists... "
+    echo -n "check if Erlang/OTP exists... "
     if !(erl -version > /dev/null 2>&1); then
         echo "First, You must install the erlang otp"
         echo "http://www.erlang.org/downloads.html"
