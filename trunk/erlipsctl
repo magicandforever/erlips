@@ -130,6 +130,7 @@ debug ()
     echo ""
     $ERL \
       $NAME debug_"$ERLANG_NODE" \
+      -boot start_clean \
       -remsh $ERLANG_NODE \
       $ERLANG_OPTS $ARGS "$@"
 }
@@ -166,6 +167,7 @@ ctl ()
     $ERL \
       $NAME ctl_"$ERLANG_NODE" \
       -noinput \
+      -boot start_clean \
       -pa $EBINS \
       -s ${CTLAPP}  -extra $ERLANG_NODE $@
     result=$?

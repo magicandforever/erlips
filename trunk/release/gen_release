@@ -82,10 +82,10 @@ cp_ctl_sh(RelDir, App) ->
     io:format("src is ~p des is:~p~n", [Src, Des]),
 
     % first mv the file to RelDir
-    "" = os:cmd(lists:concat(["mv ", Src, " ", Des]), 
+    "" = os:cmd(lists:concat(["mv ", Src, " ", Des])), 
     % change the erlipsctl ERL variable
     %Cmd = lists:concat(["cat ", Des, " | sed -e \"s/ERL=erl\\/ERL=.\\/bin\\/erl/g\" > ", Des]),
-    Cmd = lists:concat(["cat ", Des, " | sed -e \"s/ERL=erl\\/ERL=.\\/bin\\/erl/g\" > ", Des]),
+    Cmd = lists:concat(["cat ", Des, " | sed -e \"s/ERL=erl/ERL=.\\/bin\\/erl/g\" > ", Des]),
     io:format("cmd is ~p~n", [Cmd]),
     "" = os:cmd(Cmd).
     
