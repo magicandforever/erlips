@@ -55,7 +55,7 @@ gen_target_system(Server, ConfigFile) ->
     RelDir = get_reldir(),
     file:make_dir(RelDir),
     ok = reltool:eval_target_spec(Spec, code:root_dir(), RelDir),
-    {ok, _} = file:copy(ConfigFile, filename:join([RelDir, ConfigFile])),
+     cp_start_clean_boot(RelDir),
     LibDir = filename:join([RelDir, "lib"]),
     io:format("reldir:~p~nsub dirs:~p~nlib dirs:~p~n", 
         [RelDir, file:list_dir(RelDir), file:list_dir(LibDir)]),
@@ -65,3 +65,15 @@ get_reldir() ->
     {{Y, Mon, Day}, {H, M, S}} = erlang:localtime(),
     lists:flatten(io_lib:format("~s-~b~2..0b~2..0b-~2..0b~2..0b~2..0b", 
             [?REL_DIR_BASE, Y, Mon, Day, H, M, S])).
+
+%% copy then start_clean boot to the target system
+cp_start_clean_boot(RelDir) ->
+    OTPBin = filename:join([code:root_dir(), "bin"]),
+    TargetBin = filename:join([RelDir, "bin"]),
+    Boots = ["start_clean.boot"],
+    [ {ok, _} = file:copy(to_file(OTPBin, Boot), to_file(TargetBin, Boot))
+        || Boot <- Boots].
+
+to_file(Base, File) ->
+    filename:join([Base, File]).
+
