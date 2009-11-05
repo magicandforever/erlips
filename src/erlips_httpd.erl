@@ -143,8 +143,7 @@ server_header() ->
 %% doc load all http handler mods name in ebin
 load_mods_name() ->
     Ebin = code:lib_dir(erlips, ebin),
-    io:format("Ebin is ~p~n", [Ebin]),
-    Dirs = ?CONF_GET2(http_handler_dirs, [Ebin]),
+    Dirs = ?CONF_GET2(http_handler_dirs, []) ++ [Ebin],
 
     Mods = 
     [
