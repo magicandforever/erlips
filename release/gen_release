@@ -4,7 +4,7 @@
 
 -define(DEF_CONFIG, "rel.config").
 -define(SCRIPT_EXT, ".script").
--define(ZIP_EXT, ".zip").
+-define(TAR_EXT, ".tar.gz").
 -define(REL_DIR_BASE, "target-release").
 
 main(Args) ->
@@ -24,10 +24,10 @@ main(Args) ->
     
     gen_boot_script(Server, rel_name(File)),
     {ok, RelDir} = gen_target_system(Server, File),
-    io:format("create zip..."),
-    ZipFile = RelDir ++ ?ZIP_EXT,
-    {ok, ZipFile} = zip:zip(ZipFile, [RelDir]),
-    io:format("ok~nzip is ~p~n", [ZipFile]).
+    io:format("create tar archive..."),
+    TarFile = RelDir ++ ?TAR_EXT,
+    "" = os:cmd("tar czf " ++ TarFile ++ " " ++ RelDir),
+    io:format("ok~ntar is ~p~n", [TarFile]).
 
 %% get config file
 get_config_file([]) ->
