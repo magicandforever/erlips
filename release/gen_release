@@ -55,7 +55,8 @@ gen_target_system(Server, ConfigFile) ->
     RelDir = get_reldir(),
     file:make_dir(RelDir),
     ok = reltool:eval_target_spec(Spec, code:root_dir(), RelDir),
-     cp_start_clean_boot(RelDir),
+    cp_start_clean_boot(RelDir),
+    cp_ctl_sh(RelDir, rel_name(ConfigFile)),
     LibDir = filename:join([RelDir, "lib"]),
     io:format("reldir:~p~nsub dirs:~p~nlib dirs:~p~n", 
         [RelDir, file:list_dir(RelDir), file:list_dir(LibDir)]),
@@ -66,13 +67,28 @@ get_reldir() ->
     lists:flatten(io_lib:format("~s-~b~2..0b~2..0b-~2..0b~2..0b~2..0b", 
             [?REL_DIR_BASE, Y, Mon, Day, H, M, S])).
 
-%% copy then start_clean boot to the target system
+%% copy then some boot files to the target system
 cp_start_clean_boot(RelDir) ->
     OTPBin = filename:join([code:root_dir(), "bin"]),
     TargetBin = filename:join([RelDir, "bin"]),
     Boots = ["start_clean.boot"],
     [ {ok, _} = file:copy(to_file(OTPBin, Boot), to_file(TargetBin, Boot))
         || Boot <- Boots].
+
+%% copy the RelDir/lib/erlips/erlipsctl to the RelDir
+cp_ctl_sh(RelDir, App) ->
+    Src = filename:join([RelDir, "lib", App++"*", App ++ "ctl"]),
+    Des = filename:join([RelDir, App ++ "ctl"]),
+    io:format("src is ~p des is:~p~n", [Src, Des]),
+
+    % first mv the file to RelDir
+    "" = os:cmd(lists:concat(["mv ", Src, " ", Des]), 
+    % change the erlipsctl ERL variable
+    %Cmd = lists:concat(["cat ", Des, " | sed -e \"s/ERL=erl\\/ERL=.\\/bin\\/erl/g\" > ", Des]),
+    Cmd = lists:concat(["cat ", Des, " | sed -e \"s/ERL=erl\\/ERL=.\\/bin\\/erl/g\" > ", Des]),
+    io:format("cmd is ~p~n", [Cmd]),
+    "" = os:cmd(Cmd).
+    
 
 to_file(Base, File) ->
     filename:join([Base, File]).
